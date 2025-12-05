@@ -12,13 +12,46 @@ fn main() {
         for number in lower_bound..=upper_bound {
             let num_as_str = number.to_string();
             let len = num_as_str.len();
-            if len.is_multiple_of(2) {
-                let (left, right) = num_as_str.split_at(len / 2);
-                if left == right {
+            let factors = calculate_factors(len);
+            for f in factors {
+                if is_id_invalid(f, &num_as_str, len) {
                     result += number;
+                    break;
                 }
             }
         }
     }
     println!("{result}");
+}
+
+fn calculate_factors(len: usize) -> Vec<usize> {
+    let mut factors = Vec::new();
+    let mut i = 1;
+    while i * i <= len {
+        if len % i == 0 {
+            factors.push(i);
+
+            if i * i != len {
+                factors.push(len / i);
+            }
+        }
+        i += 1;
+    }
+
+    factors.retain(|f| *f != len);
+    factors.sort_unstable_by(|a, b| b.cmp(a)); // reverse sort in one
+
+    factors
+}
+
+fn is_id_invalid(offset: usize, s: &str, len: usize) -> bool {
+    let control = &s[0..offset];
+
+    for i in 0..len / offset {
+        if &s[i * offset..(i + 1) * offset] != control {
+            return false;
+        }
+    }
+
+    true
 }
