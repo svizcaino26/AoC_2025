@@ -1,7 +1,7 @@
 use std::fs;
 
 fn main() {
-    let contents = fs::read_to_string("input/day02.txt").expect("Failed to read file");
+    let contents = fs::read_to_string("input/day02/day02.txt").expect("Failed to read file");
     let contents: Vec<&str> = contents.trim().split(",").collect();
     let mut result: u64 = 0;
 
